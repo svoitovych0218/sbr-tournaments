@@ -29,8 +29,8 @@ const urls = {
 
 function App() {
   const [data, setData] = useState<any>(undefined);
-  const [env, setEnv] = useState<string>('1');
-  const [dateTime, setDateTime] = useState<Dayjs | null>(dayjs(new Date().toISOString()))
+  const [env, setEnv] = useState<string>('2');
+  const [dateTime, setDateTime] = useState<Dayjs | null>(dayjs(new Date(new Date().setHours(new Date().getHours(), 0, 0, 0)).toISOString()))
   useEffect(() => {
     (async () => {
       let url = env === '1' ? urls.dev : env === '2' ? urls.stage : urls.production;
