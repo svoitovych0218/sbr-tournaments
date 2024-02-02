@@ -140,14 +140,14 @@ function App() {
                       <TableCell rowSpan={2} component="th" scope="row">
                         {new Date(row.playedAt).toLocaleString()}
                       </TableCell>
-                      <TableCell sx={{ backgroundColor: isTeam1Winner ? '#abf4ab' : '#f0c4c4' }} align="right">{row.teamStats[0]?.totalPoints.toFixed()}</TableCell>
+                      <TableCell sx={{ backgroundColor: isTeam1Winner ? '#abf4ab' : '#f0c4c4' }} align="right">{Math.trunc(row.teamStats[0]?.totalPoints)}</TableCell>
                       <TableCell sx={{ backgroundColor: isTeam1Winner ? '#abf4ab' : '#f0c4c4' }} align="right">{row.teamStats[0]?.userNames.map((s: string) => (<Chip label={s} variant="outlined" />))}</TableCell>
                     </TableRow>
                     <TableRow
                       key={i}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
-                      <TableCell sx={{ backgroundColor: isTeam1Winner ? '#f0c4c4' : '#abf4ab' }} align="right">{row.teamStats[1]?.totalPoints.toFixed()}</TableCell>
+                      <TableCell sx={{ backgroundColor: isTeam1Winner ? '#f0c4c4' : '#abf4ab' }} align="right">{Math.trunc(row.teamStats[1]?.totalPoints)}</TableCell>
                       <TableCell sx={{ backgroundColor: isTeam1Winner ? '#f0c4c4' : '#abf4ab' }} align="right">{row.teamStats[1]?.userNames.map((s: string) => (<Chip label={s} variant="outlined" />))}</TableCell>
                     </TableRow>
                   </>
