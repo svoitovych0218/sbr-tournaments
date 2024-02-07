@@ -2,18 +2,18 @@ export const formatTimeSpan =(timeSpan: string) => {
     let pattern = /(\d+)\.(\d{2}):(\d{2}):(\d{2})(\.\d+)?/;
     let match = timeSpan.match(pattern);
 
-    let days = 0, hours = 0, minutes = 0, _ = 0;
+    let days = 0, hours = 0, minutes = 0;
 
     if (match) {
         // TimeSpan includes days
-        [, days, hours, minutes, _] = match.map(Number);
+        [, days, hours, minutes, ] = match.map(Number);
     } else {
         // Attempt to parse the TimeSpan assuming it does not include days
         pattern = /(\d{1,2}):(\d{2}):(\d{2})(\.\d+)?/;
         match = timeSpan.match(pattern);
         if (match) {
             // TimeSpan does not include days
-            [, hours, minutes, _] = match.map(Number);
+            [, hours, minutes, ] = match.map(Number);
         } else {
             return "Invalid TimeSpan format";
         }

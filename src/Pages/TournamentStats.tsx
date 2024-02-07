@@ -17,13 +17,6 @@ import dayjs, { Dayjs } from 'dayjs';
 import { EnvContext } from '../Layout/Layout';
 import { getBaseUrl } from '../utils/baseUrl';
 
-
-const urls = {
-    dev: 'https://dev-api.battle-royale.site/api/leaderboard/tournaments',
-    stage: 'https://stage-api.battle-royale.site/api/leaderboard/tournaments',
-    production: 'https://production-api.battle-royale.site/api/leaderboard/tournaments'
-}
-
 export const TournamentStats = () => {
     const [data, setData] = useState<any>(undefined);
     const [fromDateTime, setFromDateTime] = useState<Dayjs | null>(dayjs(new Date(new Date().setHours(new Date().getHours() - 24, 0, 0, 0)).toISOString()))
