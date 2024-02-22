@@ -3,7 +3,7 @@ import { Layout } from "./Layout/Layout";
 import { TournamentStats } from "./Pages/TournamentStats";
 import { NewUserStats } from "./Pages/NewUserStats";
 import { ActivityStats } from "./Pages/ActivityStats";
-import { UserGemsPage } from "./Pages/UserGems";
+import { UserTournamentPointsPage } from "./Pages/TournamentPoints";
 
 function App() {
 
@@ -16,7 +16,7 @@ function App() {
           <Route path="new-users-stats" element={<NewUserStats />} />
           <Route path="tournaments" element={<TournamentStats />} />
           <Route path="activity-stats" element={<ActivityStats />} />
-          <Route path='user-gems' element={<UserGemsPage />} />
+          <Route path='tournament-points' element={<UserTournamentPointsPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

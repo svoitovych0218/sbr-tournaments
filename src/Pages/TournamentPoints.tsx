@@ -8,51 +8,55 @@ import EditIcon from '@mui/icons-material/Edit';
 import DoneIcon from '@mui/icons-material/Done';
 import JSONbig from 'json-bigint';
 
-interface UserGemsApiResponse {
+interface UserTournamentPointsApiResponse {
     userId: BigInt,
     userName: string,
     createdAt: string,
-    gemsCount: number
+    tournamentPoints: number,
+    tournamentPlayedCount: number
 }
 
-interface UserGems {
+interface UserTournamentPoints {
     userId: BigInt,
     userName: string,
     createdAt: Date,
-    gemsCount: number
+    tournamentPoints: number,
+    tournamentPlayedCount: number
 }
 
-const getUserGemsData = async (env: string, userName: string | undefined) => {
-    let url = `${getBaseUrl(env)}/admin/user-gems`;
+const getTournamentsPointsData = async (env: string, userName: string | undefined) => {
+    let url = `${getBaseUrl(env)}/admin/user-tournament-points`;
     if (userName) {
         url += `?userName=${userName}`;
     }
-    const res = await axios.get(url, {transformResponse: [data => data]});
-    const data = JSONbig.parse(res.data) as UserGemsApiResponse[];
+    const res = await axios.get(url, { transformResponse: [data => data] });
+    const data = JSONbig.parse(res.data) as UserTournamentPointsApiResponse[];
 
     const response = data.map(s => ({
         userId: s.userId,
         userName: s.userName,
         createdAt: new Date(s.createdAt),
-        gemsCount: s.gemsCount
-    } as UserGems));
+        tournamentPoints: s.tournamentPoints,
+        tournamentPlayedCount: s.tournamentPlayedCount,
+    } as UserTournamentPoints));
 
     return response;
 }
 
-const CustomRow = ({ row }: { row: UserGems }) => {
-    const [gemsCount, setGemsCount] = useState<number>(row.gemsCount);
+const CustomRow = ({ row }: { row: UserTournamentPoints }) => {
+    const [pointsCount, setPointsCount] = useState<number>(row.tournamentPoints);
+    const [playedClount, setPlayedCount] = useState<number>(row.tournamentPlayedCount);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const envCtx = useContext(EnvContext);
 
     const handleChange = useCallback(async () => {
         setIsLoading(true);
-        const url = `${getBaseUrl(envCtx)}/admin/set-gems`;
-        await axios.post(url, { userGems: [{ userId: row.userId, gemsCount: gemsCount }] });
+        const url = `${getBaseUrl(envCtx)}/admin/set-toournament-points`;
+        await axios.post(url, { tournamentPoints: [{ userId: row.userId, tournamentPoints: pointsCount, tournamentPlayedCount: playedClount }] });
         setIsLoading(false);
         setIsEditing(false);
-    }, [envCtx, gemsCount, row.userId]);
+    }, [envCtx, pointsCount, playedClount, row.userId]);
 
     return (
         <TableRow key={`${row.userName}-${row.userId}`} sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -60,11 +64,22 @@ const CustomRow = ({ row }: { row: UserGems }) => {
             <TableCell align="left">{row.createdAt.toLocaleString()}</TableCell>
             <TableCell align="right">
                 <TextField
-                    id={`gem-${row.userId}`}
-                    onChange={(e) => setGemsCount(+e.target.value)}
-                    label="Gems"
+                    id={`points-${row.userId}`}
+                    onChange={(e) => setPointsCount(+e.target.value)}
+                    label="Points"
                     type='number'
-                    value={gemsCount}
+                    value={pointsCount}
+                    variant="outlined"
+                    disabled={!isEditing}
+                    sx={{marginRight: 2}}
+                />
+
+                <TextField
+                    id={`played-count-${row.userId}`}
+                    onChange={(e) => setPlayedCount(+e.target.value)}
+                    label="Played Count"
+                    type='number'
+                    value={playedClount}
                     variant="outlined"
                     disabled={!isEditing}
                 />
@@ -84,8 +99,8 @@ const CustomRow = ({ row }: { row: UserGems }) => {
     )
 }
 
-export const UserGemsPage = () => {
-    const [userStats, setUserStats] = useState<UserGems[]>([]);
+export const UserTournamentPointsPage = () => {
+    const [userStats, setUserStats] = useState<UserTournamentPoints[]>([]);
     const envCtx = useContext(EnvContext);
 
     const [userNameFilter, setUserNameFilter] = useState<string | undefined>(undefined)
@@ -100,7 +115,7 @@ export const UserGemsPage = () => {
         (async () => {
             setInProgress(true);
             setUserStats([]);
-            const data = await getUserGemsData(envCtx, userNameFilter);
+            const data = await getTournamentsPointsData(envCtx, userNameFilter);
             setUserStats(data);
             setInProgress(false);
         })();
@@ -119,7 +134,7 @@ export const UserGemsPage = () => {
                             <TableRow>
                                 <TableCell align="left">UserName</TableCell>
                                 <TableCell align="left">CreatedAt</TableCell>
-                                <TableCell align="right">Gems</TableCell>
+                                <TableCell align="right">Points</TableCell>
                             </TableRow>
                         </TableHead>
                         {inProgress ? <CircularProgress /> : (
